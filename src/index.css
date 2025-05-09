@@ -1,0 +1,110 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 27% 98%;
+    --foreground: 222 47% 11%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222 47% 11%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222 47% 11%;
+
+    --primary: 250 47% 50%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96%;
+    --secondary-foreground: 222 47% 11%;
+
+    --muted: 210 40% 96%;
+    --muted-foreground: 215 16% 47%;
+
+    --accent: 262 83% 58%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214 32% 91%;
+    --input: 214 32% 91%;
+    --ring: 222 47% 11%;
+
+    --radius: 0.5rem;
+
+    --sidebar-background: 250 48% 10%;
+    --sidebar-foreground: 210 40% 98%;
+    --sidebar-primary: 250 47% 50%;
+    --sidebar-primary-foreground: 210 40% 98%;
+    --sidebar-accent: 262 83% 58%;
+    --sidebar-accent-foreground: 210 40% 98%;
+    --sidebar-border: 250 30% 20%;
+    --sidebar-ring: 250 47% 50%;
+  }
+
+  .dark {
+    --background: 222 47% 6%;
+    --foreground: 210 40% 98%;
+
+    --card: 222 47% 8%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222 47% 8%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 250 47% 60%;
+    --primary-foreground: 222 47% 11%;
+
+    --secondary: 217 33% 18%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217 33% 18%;
+    --muted-foreground: 215 20% 65%;
+
+    --accent: 262 83% 68%;
+    --accent-foreground: 222 47% 11%;
+
+    --destructive: 0 63% 31%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217 33% 18%;
+    --input: 217 33% 18%;
+    --ring: 213 27% 84%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  .tech-card {
+    @apply relative overflow-hidden transition-all duration-300 hover:shadow-lg;
+  }
+  
+  .tech-card::before {
+    @apply content-[''] absolute top-0 left-0 w-1 h-full transition-all duration-300;
+  }
+  
+  .tech-card:hover::before {
+    @apply w-2;
+  }
+  
+  .tech-python::before { @apply bg-tech-python; }
+  .tech-devops::before { @apply bg-tech-devops; }
+  .tech-cloud::before { @apply bg-tech-cloud; }
+  .tech-linux::before { @apply bg-tech-linux; }
+  .tech-networking::before { @apply bg-tech-networking; }
+  .tech-storage::before { @apply bg-tech-storage; }
+  .tech-virtualization::before { @apply bg-tech-virtualization; }
+  .tech-objectstorage::before { @apply bg-tech-objectstorage; }
+  .tech-ai::before { @apply bg-tech-ai; }
+}
