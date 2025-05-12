@@ -10,33 +10,44 @@ export default async function handler(req, res) {
       return res.status(500).json({ error: 'API key not configured' });
     }
 
-    // Log request headers for debugging (remove in production)
-    console.log('Request headers:', JSON.stringify(req.headers));
-    
-    // Extract authorization from request if present
-    const authHeader = req.headers.authorization || `Bearer ${API_KEY}`;
+    // Set a timeout for the fetch request
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 8000); // 8 second timeout
 
-    const response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': authHeader,
-        'Accept': 'application/json'
-      },
-      body: JSON.stringify(req.body)
-    });
-
-    if (!response.ok) {
-      const errorText = await response.text();
-      console.error('NVIDIA API error:', response.status, errorText);
-      return res.status(response.status).json({ 
-        error: `NVIDIA API returned ${response.status}`,
-        details: errorText
+    try {
+      const response = await fetch('https://integrate.api.nvidia.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${API_KEY}`,
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(req.body),
+        signal: controller.signal
       });
-    }
 
-    const data = await response.json();
-    return res.status(200).json(data);
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error('NVIDIA API error:', response.status, errorText);
+        return res.status(response.status).json({ 
+          error: `NVIDIA API returned ${response.status}`,
+          details: errorText
+        });
+      }
+
+      const data = await response.json();
+      return res.status(200).json(data);
+    } catch (fetchError) {
+      if (fetchError.name === 'AbortError') {
+        return res.status(504).json({ 
+          error: 'Request timeout', 
+          message: 'The request to the NVIDIA API timed out' 
+        });
+      }
+      throw fetchError;
+    }
   } catch (error) {
     console.error('Proxy error:', error.message);
     return res.status(500).json({ 
@@ -45,3 +56,4 @@ export default async function handler(req, res) {
     });
   }
 }
+
