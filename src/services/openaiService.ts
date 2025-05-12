@@ -1,6 +1,6 @@
 
-// NVIDIA API Key
-const API_KEY = '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';
+// Replace hardcoded API key with environment variable
+const API_KEY = import.meta.env.VITE_NVIDIA_API_KEY || '';
 
 interface ChatMessage {
   role: 'system' | 'user' | 'assistant';
