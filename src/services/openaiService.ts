@@ -51,8 +51,9 @@ export const generateTutorResponse = async (
       const data: OpenAIResponse = await response.json();
       return data.choices[0].message.content;
     } else {
-      console.warn('API request failed:', await response.text());
-      throw new Error(`API request failed with status ${response.status}`);
+      const errorText = await response.text();
+      console.warn('API request failed:', errorText);
+      throw new Error(`API request failed with status ${response.status}: ${errorText}`);
     }
   } catch (error) {
     console.error('Error generating tutor response:', error);
@@ -99,8 +100,9 @@ export const generateCodeFeedback = async (
       const data: OpenAIResponse = await response.json();
       return data.choices[0].message.content;
     } else {
-      console.warn('API request failed:', await response.text());
-      throw new Error(`API request failed with status ${response.status}`);
+      const errorText = await response.text();
+      console.warn('API request failed:', errorText);
+      throw new Error(`API request failed with status ${response.status}: ${errorText}`);
     }
   } catch (error) {
     console.error('Error generating code feedback:', error);
